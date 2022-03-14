@@ -1,0 +1,21 @@
+{
+  "name": "fso_p3",
+  "version": "1.0.0",
+  "description": "FullStackOpen2022 \u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D \u001b[C\u001b[C\u001b[D\u001b[DS\u001b[3~\u001b[2~tack Open 2022 Part 3",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo 'No test specified' && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "author": "Nicholas Tan",
+  "license": "ISC",
+  "devDependencies": {
+    "json-server": "^0.17.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15"
+  }
+}
