@@ -9,8 +9,8 @@
     "dev": "nodemon index.js",
     "build:ui": "rm -rf build && cd ../fso_p3_frontend/ && npm run build && cp -r build ../fso_p3",
     "deploy": "git push heroku main",
-    "deploy:full": " npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
-    "logs:prod": "heroku logs --tail" 
+    "deploy:full": " npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
+    "logs:prod": "heroku logs --tail"
   },
   "author": "Nicholas Tan",
   "license": "ISC",
@@ -20,6 +20,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.3",
+    "mongoose": "^6.2.6",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15"
   }
