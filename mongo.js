@@ -5,14 +5,14 @@ const AddPerson = (person) => {
     ...person,
   })
 
-  newPerson.save()
+  return newPerson.save()
 }
 
-const GetAllPersons = (filter) => {
-  return Person.find({})
+const GetPersons = (filter) => {
+  return Person.find(filter)
 }
 
 module.exports = { 
   AddPerson, 
-  GetAllPersons
+  GetPersons
 }
