@@ -106,7 +106,7 @@ app.post('/api/persons', (request, response) => {
     }
 
     db.AddPerson(newPerson).then(() => {
-      response.status(200).send(`${newPerson}`)
+      response.status(200).send(JSON.stringify(newPerson))
     })
   })
 })
