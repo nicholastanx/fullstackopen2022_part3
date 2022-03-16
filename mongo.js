@@ -8,11 +8,16 @@ const AddPerson = (person) => {
   return newPerson.save()
 }
 
+const DeletePerson = (id) => {
+  return Person.findByIdAndDelete(id)
+}
+
 const GetPersons = (filter) => {
   return Person.find(filter)
 }
 
 module.exports = { 
   AddPerson, 
+  DeletePerson,
   GetPersons
 }

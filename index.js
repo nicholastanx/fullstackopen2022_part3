@@ -51,29 +51,21 @@ app.get('/api/persons/:id', (request, response) => {
   })
 })
 
-// app.delete('/api/persons/:id', (request, response) => {
-//   const requestedId = request.params.id
-//   const lengthBefore = persons.length
-//   persons = persons.filter((p) => p.id != requestedId)
+app.delete('/api/persons/:id', (request, response, next) => {
+  const requestedId = request.params.id
 
-//   if (lengthBefore === persons.length) {
-//     response.status(404).send(`Person with id ${requestedId} was not found!`)
-//     return
-//   }
-
-//   response.status(200).send(`Deleted!`)
-// })
+  db.DeletePerson(requestedId)
+    .then((result) => {
+      if (result) {
+        response.status(200).send(`Deleted!`)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
+})
 
 app.post('/api/persons', (request, response) => {
-  /*
-    Expected fields:
-      application/json
-      {
-        "name": <...>,
-        "number": <...>
-      }
-  */
-
   const data = request.body
 
   db.GetPersons().then((result) => {
@@ -116,6 +108,18 @@ const unknownEndpoint = (request, response) => {
 }
 
 app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name == 'CastError') {
+    return response.status(400).send({ error: 'malformed id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 
