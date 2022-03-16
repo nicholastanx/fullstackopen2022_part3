@@ -1,5 +1,4 @@
-import db from './mongo.js'
-
+const db = require('./mongo.js')
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
