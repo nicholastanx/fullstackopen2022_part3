@@ -113,7 +113,7 @@ app.post('/api/persons', (request, response, next) => {
       if (duplicates.length > 0) {
         let original = duplicates[0]
         original.number = data.number
-        
+
         db.UpdatePerson(original)
           .then((result) => {
             response.status(200).send(`${data.name} was updated with phone number ${data.number}`)
@@ -147,11 +147,13 @@ app.use(unknownEndpoint)
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
-  if (error.name == 'CastError') {
+  if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformed id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).send({ error: error.message })
   }
 
-  return response.status(500).send({ error: 'unidentified error' })
+  next(error)
 }
 
 app.use(errorHandler)
