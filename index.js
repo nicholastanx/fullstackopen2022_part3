@@ -54,29 +54,25 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-// app.put('/api/persons/:id', (request, response, next) => {
-//   const data = request.body
-//   const requestedId = request.params.id
+app.put('/api/persons/:id', (request, response, next) => {
+  const data = request.body
+  const requestedId = request.params.id
 
-//   db.GetPersonById(requestedId)
-//     .then((person) => {
-//       if (!person) {
-//         response.status(404).send(errs.IDNotFound)
-//       }
+  db.GetPersonById(requestedId)
+    .then((person) => {
+      if (!person) {
+        response.status(404).send(errs.IDNotFound)
+      }
 
-//       const updatedPerson = new person({
-//         ...person,
-//         ...data,
-//       })
-
-//       db.UpdatePerson(updatedPerson)
-//         .then((result) => {
-//           response.status(200).send(`Updated!`)
-//         })
-//         .catch(error => next(error))
-//     })
-//     .catch(error => next(error))
-// })
+      person.number = data.number
+      db.UpdatePerson(person)
+        .then((result) => {
+          response.status(200).send(`Updated!`)
+        })
+        .catch(error => next(error))
+    })
+    .catch(error => next(error))
+})
 
 app.delete('/api/persons/:id', (request, response, next) => {
   const requestedId = request.params.id
@@ -106,21 +102,8 @@ app.post('/api/persons', (request, response, next) => {
       } else if (!data.number) {
         response.status(400).send(`'number' field must be provided in the request body!`)
         return
-      }
-      
-      //  If duplicate exists...
-      const duplicates = result.filter((p) => p.name === data.name)
-      if (duplicates.length > 0) {
-        let original = duplicates[0]
-        original.number = data.number
-
-        db.UpdatePerson(original)
-          .then((result) => {
-            response.status(200).send(`${data.name} was updated with phone number ${data.number}`)
-          })
-          .catch(error => next(error))
-        
-        return
+      } else if (result.filter((p) => p.name === data.name).length > 0) {
+        response.status(400).send(`${data.name} already exists in the phone book!`)
       }
 
       //  Add new person
