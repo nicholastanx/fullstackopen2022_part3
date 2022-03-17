@@ -5,11 +5,10 @@ const errs = require('./errs.js')
 
 const express = require('express')
 const morgan = require('morgan')
-const person = require('./models/person.js')
 const app = express()
 
-morgan.token('body', function(req, res) { 
-  if (req.headers['content-type'] == 'application/json') {
+morgan.token('body', function(req) {
+  if (req.headers['content-type'] === 'application/json') {
     return JSON.stringify(req.body)
   }
 
@@ -20,11 +19,11 @@ app.use(express.static('build'))
 app.use(express.json())
 app.use(morgan(':method :url :status: :res[content-length] - :response-time ms - :body'))
 
-app.get('/info', (request, response, next) => {
+app.get('/info', (_, response, next) => {
   db.GetPersons()
     .then((result) => {
       response.send(
-        `Phonebook has info for ${result.length} people. <br />` + 
+        `Phonebook has info for ${result.length} people. <br />` +
         `${new Date()}`
       )
     })
@@ -66,8 +65,8 @@ app.put('/api/persons/:id', (request, response, next) => {
 
       person.number = data.number
       db.UpdatePerson(person)
-        .then((result) => {
-          response.status(200).send(`Updated!`)
+        .then(() => {
+          response.status(200).send('Updated!')
         })
         .catch(error => next(error))
     })
@@ -80,7 +79,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
   db.DeletePerson(requestedId)
     .then((result) => {
       if (result) {
-        response.status(200).send(`Deleted!`)
+        response.status(200).send('Deleted!')
       } else {
         response.status(404).end()
       }
@@ -94,13 +93,13 @@ app.post('/api/persons', (request, response, next) => {
   db.GetPersons()
     .then((result) => {
       if (!data) {
-        response.status(400).send(`missing request body!`)
+        response.status(400).send('missing request body!')
         return
       } else if (!data.name) {
-        response.status(400).send(`'name' field must be provided in the request body!`)
+        response.status(400).send("'name' field must be provided in the request body!")
         return
       } else if (!data.number) {
-        response.status(400).send(`'number' field must be provided in the request body!`)
+        response.status(400).send("'number' field must be provided in the request body!")
         return
       } else if (result.filter((p) => p.name === data.name).length > 0) {
         response.status(400).send(`${data.name} already exists in the phone book!`)
@@ -122,7 +121,7 @@ app.post('/api/persons', (request, response, next) => {
 })
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: "unknown endpoint"} )
+  response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)

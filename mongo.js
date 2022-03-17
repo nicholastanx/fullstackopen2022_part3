@@ -24,7 +24,7 @@ const GetPersonById = (id) => {
   return Person.findById(id)
 }
 
-module.exports = { 
+module.exports = {
   AddPerson,
   UpdatePerson,
   DeletePerson,
