@@ -113,8 +113,8 @@ app.post('/api/persons', (request, response, next) => {
       }
 
       db.AddPerson(newPerson)
-        .then(() => {
-          response.status(201).send(JSON.stringify(newPerson))
+        .then((result) => {
+          response.status(201).send(result.toJSON())
         })
         .catch(error => next(error))
     })
